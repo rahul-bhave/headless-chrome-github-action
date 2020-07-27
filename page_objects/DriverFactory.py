@@ -5,6 +5,7 @@ NOTE: Change this class as you add support for:
 2. More browsers like Opera
 """
 import dotenv,os,sys,requests,json
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -12,6 +13,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome import service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from msedge.selenium_tools import Edge
+from msedge.selenium_tools import EdgeOptions
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
@@ -64,6 +67,8 @@ class DriverFactory():
             desired_capabilities = DesiredCapabilities.OPERA
         elif browser.lower() == 'safari':
             desired_capabilities = DesiredCapabilities.SAFARI
+        elif browser.lower() == 'edge':
+            desired_capabilities = DesiredCapabilities.EDGE
         desired_capabilities['os'] = os_name
         desired_capabilities['os_version'] = os_version
         desired_capabilities['browser_version'] = browser_version
@@ -91,6 +96,8 @@ class DriverFactory():
             desired_capabilities = DesiredCapabilities.OPERA
         elif browser.lower() == 'safari':
             desired_capabilities = DesiredCapabilities.SAFARI
+        elif browser.lower() == 'edge':
+            desired_capabilities = DesiredCapabilities.EDGE
         desired_capabilities['version'] = browser_version
         desired_capabilities['platform'] = os_name + ' '+os_version
 
@@ -123,11 +130,14 @@ class DriverFactory():
                      print("SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n")
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
+        elif browser.lower() == "edge":
+            local_driver=webdriver.Edge("msedgedriver.exe")
         elif browser.lower() == "headless-chrome":
             local_driver = self.get_headless_chrome_options()
         elif browser.lower() == "headless-firefox":
             local_driver = self.get_headless_firefox_options()
         return local_driver
+
 
     def get_headless_firefox_options(self):
         "Setting up headless firefox driver options"
@@ -156,6 +166,7 @@ class DriverFactory():
         local_driver = webdriver.Chrome(options=options)
 
         return local_driver
+
 
     def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag):
         "Setup mobile device"
@@ -327,4 +338,3 @@ class DriverFactory():
         set_pref('pdfjs.disabled',True)
 
         return profile
-

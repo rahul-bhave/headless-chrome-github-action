@@ -136,6 +136,18 @@ class DriverFactory():
             local_driver = self.get_headless_chrome_options()
         elif browser.lower() == "headless-firefox":
             local_driver = self.get_headless_firefox_options()
+        elif browser.lower() == "headless-edge":
+            local_driver = self.get_headless_edge_options()
+        return local_driver
+
+    def get_headless_edge_options(self):
+        "Setting up headless edge options"
+        options = EdgeOptions()
+        options.use_chromium = True
+        options.add_argument("headless")
+        options.add_argument("disable-gpu")
+        local_driver = Edge(options=options)
+
         return local_driver
 
 

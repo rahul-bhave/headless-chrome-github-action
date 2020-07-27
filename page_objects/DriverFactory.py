@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome import service
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
@@ -123,21 +124,38 @@ class DriverFactory():
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
         elif browser.lower() == "headless-chrome":
-            options = Options()
-            options.headless = True
-            options.add_argument("--window-size=1920,1080")
-            options.add_argument("--disable-extensions")
-            options.add_argument("--proxy-server='direct://'")
-            options.add_argument("--proxy-bypass-list=*")
-            options.add_argument("--start-maximized")
-            options.add_argument('--headless')
-            options.add_argument('--disable-gpu')
-            options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--no-sandbox')
-            options.add_argument('--ignore-certificate-errors')
-            local_driver = webdriver.Chrome(options=options)
+            local_driver = self.get_headless_chrome_options()
+        elif browser.lower() == "headless-firefox":
+            local_driver = self.get_headless_firefox_options()
         return local_driver
 
+    def get_headless_firefox_options(self):
+        "Setting up headless firefox driver options"
+        options = FirefoxOptions()
+        options.headless = True
+        options.add_argument("--headless")
+        local_driver = webdriver.Firefox(options=options)
+
+        return local_driver
+
+
+    def get_headless_chrome_options(self):
+        "Setting up healess chrom driver options"
+        options = Options()
+        options.headless = True
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--proxy-server='direct://'")
+        options.add_argument("--proxy-bypass-list=*")
+        options.add_argument("--start-maximized")
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--ignore-certificate-errors')
+        local_driver = webdriver.Chrome(options=options)
+
+        return local_driver
 
     def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag):
         "Setup mobile device"

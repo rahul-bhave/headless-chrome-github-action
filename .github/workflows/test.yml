@@ -1,0 +1,22 @@
+name: Run Python Tests on altoro mutual repository
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          set -ex
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install ./google-chrome-stable_current_amd64.deb
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      # Execute Test for altoro mutual
+      - name: Run test for altoro mutual
+        run: python -m pytest tests/test_altoro_mutual_form.py --browser headless-chrome

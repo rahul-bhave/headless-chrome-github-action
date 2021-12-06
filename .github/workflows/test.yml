@@ -1,4 +1,4 @@
-name: Run Python Tests on altoro mutual repository
+name: Run Python Tests on headless-chrom browser
 on:
   push:
 jobs:

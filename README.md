@@ -1,4 +1,4 @@
-# Repo for creating github action for running tests using Selenium- 
+# Repo for creating github action for running tests using Selenium
 Test case is run using selenium+python and using headless-chrome browser.
 
 # Test Framework-
